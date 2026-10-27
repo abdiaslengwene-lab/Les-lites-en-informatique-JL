@@ -1,0 +1,525 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101a35">
+<meta name="description" content="Application de gestion du groupe LES ÉLITES EN INFORMATIQUE">
+<title>LES ÉLITES EN INFORMATIQUE</title>
+
+<style>
+:root {
+  --navy:#101a35;
+  --blue:#2563eb;
+  --light:#f3f6fc;
+  --green:#059669;
+  --red:#dc2626;
+  --text:#172033;
+  --muted:#64748b;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--light);
+  color:var(--text);
+}
+header {
+  padding:25px 18px;
+  color:white;
+  background:linear-gradient(135deg,#101a35,#2447a5);
+  border-radius:0 0 23px 23px;
+}
+.logo {
+  width:54px;height:54px;
+  display:flex;align-items:center;justify-content:center;
+  border:2px solid #ffffff80;
+  border-radius:16px;
+  font-size:24px;font-weight:bold;
+  margin-bottom:14px;
+}
+header h1 { margin:0 0 10px;font-size:24px;line-height:1.25; }
+header p { margin:0;font-size:14px;opacity:.9;line-height:1.5; }
+nav {
+  position:sticky;top:0;z-index:10;
+  display:flex;gap:7px;overflow-x:auto;
+  padding:11px;background:#fff;
+  box-shadow:0 3px 10px #00000008;
+}
+nav button {
+  flex-shrink:0;border:0;border-radius:10px;
+  padding:12px 14px;background:#e8eefc;
+  color:#172554;font-weight:bold;
+}
+nav button.active { background:var(--blue);color:#fff; }
+main { max-width:900px;margin:auto;padding:16px; }
+.page.hidden { display:none; }
+h2 { font-size:21px;margin:8px 0 15px; }
+h3 { font-size:17px; }
+.muted { color:var(--muted);font-size:14px;line-height:1.6; }
+.stats {
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:11px;margin:16px 0;
+}
+.card,.panel {
+  background:#fff;padding:17px;border-radius:15px;
+  box-shadow:0 3px 14px #14254b0b;margin-bottom:13px;
+}
+.stat-number { font-size:28px;font-weight:bold;color:var(--blue); }
+.stat-label { font-size:13px;color:var(--muted);margin-top:5px; }
+input,select,textarea {
+  width:100%;padding:12px;margin:7px 0 14px;
+  border:1px solid #cbd5e1;border-radius:9px;
+  background:white;font:inherit;color:var(--text);
+}
+textarea { min-height:90px;resize:vertical; }
+label { font-weight:bold;font-size:14px; }
+.btn {
+  border:0;border-radius:9px;padding:12px 15px;
+  background:var(--blue);color:white;font-weight:bold;
+  cursor:pointer;margin:3px 3px 3px 0;
+}
+.btn-green { background:var(--green); }
+.btn-red { background:var(--red); }
+.btn-dark { background:var(--navy); }
+.item {
+  background:#fff;border-left:4px solid var(--blue);
+  border-radius:10px;padding:15px;margin:12px 0;
+  overflow-wrap:anywhere;box-shadow:0 2px 9px #00000008;
+}
+.item p { color:var(--muted);font-size:14px;line-height:1.5; }
+.tag {
+  display:inline-block;background:#e0eafe;color:#1d4ed8;
+  padding:5px 9px;border-radius:20px;font-size:12px;
+  margin:4px 0;
+}
+.empty { text-align:center;padding:24px;color:var(--muted); }
+footer { text-align:center;padding:24px 14px;color:var(--muted);font-size:12px; }
+hr { border:0;border-top:1px solid #e2e8f0;margin:17px 0; }
+@media(min-width:600px) {
+  .stats { grid-template-columns:repeat(4,minmax(0,1fr)); }
+  header,main { padding-left:25px;padding-right:25px; }
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="logo">ÉI</div>
+  <h1>LES ÉLITES EN INFORMATIQUE</h1>
+  <p>Plateforme officielle de gestion du groupe d'étude</p>
+  <p>Apprendre · Collaborer · Innover · Réussir</p>
+</header>
+
+<nav id="navigation">
+  <button class="active" data-page="accueil">Accueil</button>
+  <button data-page="membres">Membres</button>
+  <button data-page="reunions">Réunions</button>
+  <button data-page="activites">Activités</button>
+  <button data-page="annonces">Annonces</button>
+  <button data-page="outils">Outils</button>
+</nav>
+
+<main>
+<section id="accueil" class="page">
+  <h2>Tableau de bord</h2>
+  <p class="muted">Bienvenue dans votre espace de travail collaboratif.</p>
+
+  <div class="stats">
+    <div class="card"><div class="stat-number" id="totalMembres">0</div><div class="stat-label">Membres</div></div>
+    <div class="card"><div class="stat-number" id="totalReunions">0</div><div class="stat-label">Réunions</div></div>
+    <div class="card"><div class="stat-number" id="totalActivites">0</div><div class="stat-label">Activités</div></div>
+    <div class="card"><div class="stat-number" id="totalAnnonces">0</div><div class="stat-label">Annonces</div></div>
+  </div>
+
+  <div class="panel">
+    <h3>Notre mission</h3>
+    <p class="muted">Renforcer nos compétences en informatique, réaliser des projets ensemble et construire de précieux souvenirs professionnels durant notre dernière année académique.</p>
+  </div>
+
+  <div class="panel">
+    <h3>Prochaines réunions</h3>
+    <div id="resumeReunions"></div>
+  </div>
+
+  <div class="panel">
+    <h3>Activités en cours</h3>
+    <div id="resumeActivites"></div>
+  </div>
+
+  <div class="panel">
+    <h3>Dernières annonces</h3>
+    <div id="resumeAnnonces"></div>
+  </div>
+</section>
+
+<section id="membres" class="page hidden">
+  <h2>Gestion des membres</h2>
+  <form id="formMembre" class="panel">
+    <label>Nom complet</label>
+    <input name="nom" required placeholder="Nom et postnom">
+    <label>Fonction dans le groupe</label>
+    <select name="role">
+      <option>Membre</option>
+      <option>Coordinateur</option>
+      <option>Coordinateur adjoint</option>
+      <option>Secrétaire</option>
+      <option>Responsable technique</option>
+      <option>Trésorier</option>
+    </select>
+    <label>Contact téléphonique</label>
+    <input name="contact" placeholder="Contact facultatif">
+    <label>Compétence ou spécialité</label>
+    <input name="competence" placeholder="Ex. : Développement web">
+    <button class="btn">+ Ajouter le membre</button>
+  </form>
+  <div id="listeMembres"></div>
+</section>
+
+<section id="reunions" class="page hidden">
+  <h2>Réunions et planification</h2>
+  <form id="formReunion" class="panel">
+    <label>Titre de la réunion</label>
+    <input name="titre" required placeholder="Ex. : Planification annuelle">
+    <label>Date et heure</label>
+    <input name="date" type="datetime-local" required>
+    <label>Format de la réunion</label>
+    <select name="format">
+      <option>Appel vocal</option>
+      <option>Discussion écrite dans le groupe</option>
+      <option>Présentiel</option>
+      <option>Visioconférence</option>
+    </select>
+    <label>Lieu ou lien de réunion</label>
+    <input name="lieu" placeholder="Lieu ou lien facultatif">
+    <label>Ordre du jour</label>
+    <textarea name="description" placeholder="Points à discuter..."></textarea>
+    <label>Compte rendu</label>
+    <textarea name="compteRendu" placeholder="À compléter après la réunion"></textarea>
+    <button class="btn">Enregistrer la réunion</button>
+  </form>
+  <div id="listeReunions"></div>
+</section>
+
+<section id="activites" class="page hidden">
+  <h2>Projets et activités</h2>
+  <form id="formActivite" class="panel">
+    <label>Nom de l'activité ou du projet</label>
+    <input name="titre" required placeholder="Ex. : Création d'un site web">
+    <label>Description</label>
+    <textarea name="description" placeholder="Objectifs et détails du projet"></textarea>
+    <label>Responsable</label>
+    <input name="responsable" placeholder="Nom du responsable">
+    <label>Date limite</label>
+    <input name="date" type="date">
+    <label>Priorité</label>
+    <select name="priorite">
+      <option>Normale</option>
+      <option>Haute</option>
+      <option>Urgente</option>
+    </select>
+    <button class="btn">+ Ajouter l'activité</button>
+  </form>
+  <div id="listeActivites"></div>
+</section>
+
+<section id="annonces" class="page hidden">
+  <h2>Annonces du groupe</h2>
+  <form id="formAnnonce" class="panel">
+    <label>Titre de l'annonce</label>
+    <input name="titre" required placeholder="Ex. : Réunion importante">
+    <label>Message</label>
+    <textarea name="message" required placeholder="Rédigez votre annonce..."></textarea>
+    <button class="btn">Publier l'annonce</button>
+  </form>
+  <div id="listeAnnonces"></div>
+</section>
+
+<section id="outils" class="page hidden">
+  <h2>Outils de gestion</h2>
+  <div class="panel">
+    <h3>Exporter les données</h3>
+    <p class="muted">Téléchargez une copie JSON des membres, réunions, activités et annonces enregistrés sur cet appareil.</p>
+    <button class="btn" id="exporter">Exporter mes données</button>
+  </div>
+  <div class="panel">
+    <h3>Importer une sauvegarde</h3>
+    <p class="muted">Restaurez une sauvegarde JSON précédemment exportée. Les données actuelles seront remplacées.</p>
+    <input id="fichierImport" type="file" accept=".json,application/json">
+    <button class="btn btn-dark" id="importer">Importer la sauvegarde</button>
+  </div>
+  <div class="panel">
+    <h3>Gestion des données</h3>
+    <p class="muted">Attention : cette action efface les données de l'application sur ce navigateur.</p>
+    <button class="btn btn-red" id="effacerTout">Effacer toutes les données</button>
+  </div>
+  <div class="panel">
+    <h3>À propos</h3>
+    <p><strong>LES ÉLITES EN INFORMATIQUE</strong></p>
+    <p class="muted">Application de gestion du groupe d'étude. Version initiale fonctionnant localement dans le navigateur.</p>
+  </div>
+</section>
+</main>
+
+<footer>
+  <strong>LES ÉLITES EN INFORMATIQUE</strong><br>
+  Espace de gestion du groupe d'étude<br>
+  Apprendre ensemble, réussir ensemble.
+</footer>
+
+<script>
+"use strict";
+
+const CLE = "les_elites_en_informatique_v1";
+const structureVide = () => ({
+  membres: [],
+  reunions: [],
+  activites: [],
+  annonces: []
+});
+
+function chargerDonnees() {
+  try {
+    const d = JSON.parse(localStorage.getItem(CLE));
+    if (d && Array.isArray(d.membres) &&
+        Array.isArray(d.reunions) &&
+        Array.isArray(d.activites) &&
+        Array.isArray(d.annonces)) return d;
+  } catch(e) {}
+  return structureVide();
+}
+
+let donnees = chargerDonnees();
+
+function sauvegarder() {
+  try {
+    localStorage.setItem(CLE, JSON.stringify(donnees));
+  } catch(e) {
+    alert("Sauvegarde impossible. Vérifiez l'espace disponible sur l'appareil.");
+  }
+  afficher();
+}
+
+function echapper(v) {
+  return String(v ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;",
+    '"':"&quot;", "'":"&#39;"
+  })[c]);
+}
+
+function dateLisible(v) {
+  if (!v) return "Date non précisée";
+  const d = new Date(v);
+  return isNaN(d.getTime()) ? v :
+    d.toLocaleString("fr-FR", {
+      dateStyle:"medium", timeStyle:"short"
+    });
+}
+
+function identifiant() {
+  return Date.now().toString(36) +
+    Math.random().toString(36).slice(2,10);
+}
+
+function boutonSupprimer(collection, id) {
+  return `<button class="btn btn-red"
+    onclick="supprimer('${collection}','${id}')">Supprimer</button>`;
+}
+
+function formulaire(id, collection, construire) {
+  document.getElementById(id).addEventListener("submit", function(e) {
+    e.preventDefault();
+    const f = new FormData(this);
+    const objet = construire(f);
+    objet.id = identifiant();
+    objet.creeLe = new Date().toISOString();
+    donnees[collection].unshift(objet);
+    sauvegarder();
+    this.reset();
+    alert("Enregistrement réussi !");
+  });
+}
+
+formulaire("formMembre", "membres", f => ({
+  nom:f.get("nom"),
+  role:f.get("role"),
+  contact:f.get("contact"),
+  competence:f.get("competence")
+}));
+
+formulaire("formReunion", "reunions", f => ({
+  titre:f.get("titre"),
+  date:f.get("date"),
+  format:f.get("format"),
+  lieu:f.get("lieu"),
+  description:f.get("description"),
+  compteRendu:f.get("compteRendu")
+}));
+
+formulaire("formActivite", "activites", f => ({
+  titre:f.get("titre"),
+  description:f.get("description"),
+  responsable:f.get("responsable"),
+  date:f.get("date"),
+  priorite:f.get("priorite"),
+  terminee:false
+}));
+
+formulaire("formAnnonce", "annonces", f => ({
+  titre:f.get("titre"),
+  message:f.get("message"),
+  publiee:new Date().toISOString()
+}));
+
+function supprimer(collection, id) {
+  if (!confirm("Confirmer la suppression de cet élément ?")) return;
+  donnees[collection] = donnees[collection].filter(x => x.id !== id);
+  sauvegarder();
+}
+
+function terminerActivite(id) {
+  const a = donnees.activites.find(x => x.id === id);
+  if (a) a.terminee = !a.terminee;
+  sauvegarder();
+}
+
+function afficherListe(id, collection, rendu) {
+  const zone = document.getElementById(id);
+  if (!donnees[collection].length) {
+    zone.innerHTML = '<div class="empty">Aucun élément enregistré pour le moment.</div>';
+    return;
+  }
+  zone.innerHTML = donnees[collection].map(rendu).join("");
+}
+
+function afficher() {
+  document.getElementById("totalMembres").textContent = donnees.membres.length;
+  document.getElementById("totalReunions").textContent = donnees.reunions.length;
+  document.getElementById("totalActivites").textContent = donnees.activites.length;
+  document.getElementById("totalAnnonces").textContent = donnees.annonces.length;
+
+  afficherListe("listeMembres", "membres", x => `
+    <div class="item">
+      <strong>${echapper(x.nom)}</strong><br>
+      <span class="tag">${echapper(x.role)}</span>
+      <p>Contact : ${echapper(x.contact || "Non renseigné")}</p>
+      <p>Compétence : ${echapper(x.competence || "Non renseignée")}</p>
+      ${boutonSupprimer("membres", x.id)}
+    </div>`);
+
+  afficherListe("listeReunions", "reunions", x => `
+    <div class="item">
+      <strong>${echapper(x.titre)}</strong>
+      <p>${echapper(dateLisible(x.date))}</p>
+      <span class="tag">${echapper(x.format)}</span>
+      <p>Lieu/lien : ${echapper(x.lieu || "Non précisé")}</p>
+      <p><strong>Ordre du jour :</strong><br>${echapper(x.description || "Non renseigné")}</p>
+      <p><strong>Compte rendu :</strong><br>${echapper(x.compteRendu || "À compléter")}</p>
+      ${boutonSupprimer("reunions", x.id)}
+    </div>`);
+
+  afficherListe("listeActivites", "activites", x => `
+    <div class="item">
+      <strong>${echapper(x.titre)}</strong>
+      <p>${echapper(x.description || "Pas de description")}</p>
+      <p>Responsable : ${echapper(x.responsable || "À désigner")}</p>
+      <p>Date limite : ${echapper(x.date || "Non définie")}</p>
+      <span class="tag">${echapper(x.priorite)}</span>
+      <p>Statut : ${x.terminee ? "Terminée" : "En cours"}</p>
+      <button class="btn btn-green" onclick="terminerActivite('${x.id}')">
+        ${x.terminee ? "Réouvrir" : "Marquer terminée"}
+      </button>
+      ${boutonSupprimer("activites", x.id)}
+    </div>`);
+
+  afficherListe("listeAnnonces", "annonces", x => `
+    <div class="item">
+      <strong>${echapper(x.titre)}</strong>
+      <p>${echapper(x.message)}</p>
+      <small>${echapper(dateLisible(x.publiee))}</small><br><br>
+      ${boutonSupprimer("annonces", x.id)}
+    </div>`);
+
+  const maintenant = Date.now();
+  const reunions = donnees.reunions
+    .filter(x => x.date && new Date(x.date).getTime() >= maintenant)
+    .sort((a,b) => new Date(a.date)-new Date(b.date))
+    .slice(0,3);
+
+  document.getElementById("resumeReunions").innerHTML =
+    reunions.length ? reunions.map(x => `
+      <div class="item"><strong>${echapper(x.titre)}</strong>
+      <p>${echapper(dateLisible(x.date))}</p>
+      <span class="tag">${echapper(x.format)}</span></div>`
+    ).join("") : '<div class="empty">Aucune réunion à venir.</div>';
+
+  const activites = donnees.activites.filter(x => !x.terminee).slice(0,3);
+  document.getElementById("resumeActivites").innerHTML =
+    activites.length ? activites.map(x => `
+      <div class="item"><strong>${echapper(x.titre)}</strong>
+      <p>Responsable : ${echapper(x.responsable || "À désigner")}</p></div>`
+    ).join("") : '<div class="empty">Aucune activité en cours.</div>';
+
+  document.getElementById("resumeAnnonces").innerHTML =
+    donnees.annonces.length ? donnees.annonces.slice(0,3).map(x => `
+      <div class="item"><strong>${echapper(x.titre)}</strong>
+      <p>${echapper(x.message)}</p></div>`
+    ).join("") : '<div class="empty">Aucune annonce publiée.</div>';
+}
+
+document.getElementById("navigation").addEventListener("click", e => {
+  const b = e.target.closest("button[data-page]");
+  if (!b) return;
+  document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
+  document.getElementById(b.dataset.page).classList.remove("hidden");
+  document.querySelectorAll("nav button").forEach(x => x.classList.remove("active"));
+  b.classList.add("active");
+  window.scrollTo(0,0);
+});
+
+document.getElementById("exporter").addEventListener("click", () => {
+  const fichier = new Blob(
+    [JSON.stringify(donnees, null, 2)],
+    {type:"application/json"}
+  );
+  const url = URL.createObjectURL(fichier);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "sauvegarde_elites_informatique.json";
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
+
+document.getElementById("importer").addEventListener("click", async () => {
+  const input = document.getElementById("fichierImport");
+  if (!input.files.length) {
+    alert("Sélectionnez d'abord un fichier JSON.");
+    return;
+  }
+  try {
+    const contenu = await input.files[0].text();
+    const d = JSON.parse(contenu);
+    for (const k of ["membres","reunions","activites","annonces"]) {
+      if (!Array.isArray(d[k])) throw new Error("Format invalide");
+    }
+    if (!confirm("Remplacer toutes les données actuelles par cette sauvegarde ?")) return;
+    donnees = d;
+    sauvegarder();
+    alert("Sauvegarde importée.");
+  } catch(e) {
+    alert("Fichier invalide ou illisible.");
+  }
+});
+
+document.getElementById("effacerTout").addEventListener("click", () => {
+  if (!confirm("Attention : effacer définitivement toutes les données locales ?")) return;
+  donnees = structureVide();
+  sauvegarder();
+  alert("Les données locales ont été effacées.");
+});
+
+afficher();
+</script>
+</body>
+</html>
